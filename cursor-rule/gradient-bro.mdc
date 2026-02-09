@@ -1,0 +1,29 @@
+# GradientBro — Gradient Generation
+
+## When to Activate
+
+Trigger when the user mentions any of the following:
+
+- "generate a gradient", "create a gradient", "make a gradient"
+- "replicate this gradient", "replicate this background"
+- "gradient like this", "background like this"
+- "textured background", "noisy gradient", "grainy gradient"
+- "match this gradient", "copy this gradient"
+- Attaches an image and asks for a gradient or background based on it
+
+## What to Do
+
+Read and follow the skill at `~/.cursor/skills/gradient-bro/SKILL.md` immediately.
+
+The skill will guide you through:
+1. Ensuring the `gradient-bro` CLI tool is installed
+2. Analysing the reference image
+3. Generating layered CSS (gradients + noise + blur + blend modes)
+4. Placing the code in the correct location for the project
+5. Supporting iterative refinement
+
+## Important
+
+- All gradient output must be pure CSS + inline SVG — zero image assets.
+- Place generated code directly in the user's project at the location they specify.
+- Support refinement requests ("more grain", "shift the warm spot") by editing the existing CSS.

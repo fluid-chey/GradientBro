@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GradientBro Test Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 40px;
+    }
+
+    .page-header {
+      max-width: 720px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    .card {
+      background: #000;
+      color: #fff;
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .full-width-card {
+      margin-bottom: 32px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 24px;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <h1>GradientBro Test Page</h1>
+    <p>This page exists to test GradientBro gradient generation. The black cards below are targets &mdash; each one can have its solid fill replaced with a generated CSS gradient to verify the tool output looks correct at different sizes and layouts.</p>
+  </div>
+
+  <div class="card full-width-card">
+    <h2>Full-Width Card</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus luctus urna sed urna ultricies ac tempor dui sagittis. In condimentum facilisis porta. Sed nec diam eu diam mattis viverra. Nulla fringilla, orci ac euismod semper, magna diam porttitor mauris, quis sollicitudin sapien justo in est. Pellentesque viverra fermentum libero, et volutpat nulla egestas in.</p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h2>Card One</h2>
+      <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Maecenas faucibus mollis interdum. Cras mattis consectetur purus sit amet fermentum.</p>
+    </div>
+    <div class="card">
+      <h2>Card Two</h2>
+      <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+    </div>
+    <div class="card">
+      <h2>Card Three</h2>
+      <p>Cras justo odio, dapibus ut facilisis in, egestas eget quam. Nullam quis risus eget urna mollis ornare vel eu leo. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+    </div>
+  </div>
+
+</body>
+</html>

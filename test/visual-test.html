@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GradientBro — Visual Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      padding: 40px;
+    }
+    h1 { font-size: 2rem; margin-bottom: 8px; font-weight: 600; }
+    .subtitle { color: #888; margin-bottom: 40px; font-size: 0.95rem; }
+    h2 { font-size: 1.1rem; color: #aaa; margin-bottom: 16px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .section { margin-bottom: 60px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      height: 420px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .card p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      opacity: 0.85;
+    }
+    .card .author {
+      margin-top: 16px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+    }
+    .ref-img {
+      border-radius: 16px;
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ─── Generated: Exact Fidelity ─── */
+    .card-exact {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: linear-gradient(75deg, #1B1A1D 0%, #6E370A 100%);
+    }
+    .card-exact::before {
+      content: '';
+      position: absolute;
+      inset: -15%;
+      background: radial-gradient(circle at 18% 47%, rgba(27,26,29,0.57) 0%, transparent 43%),
+        radial-gradient(circle at 52% 38%, rgba(110,55,10,0.55) 0%, transparent 47%),
+        radial-gradient(circle at 55% 54%, rgba(145,79,1,0.53) 0%, transparent 44%),
+        radial-gradient(circle at 59% 58%, rgba(250,248,248,0.53) 0%, transparent 57%),
+        radial-gradient(circle at 61% 44%, rgba(169,127,105,0.52) 0%, transparent 51%),
+        radial-gradient(circle at 68% 39%, rgba(150,88,59,0.52) 0%, transparent 45%),
+        radial-gradient(circle at 74% 72%, rgba(200,170,166,0.51) 0%, transparent 44%),
+        radial-gradient(circle at 16% 56%, rgba(78,76,65,0.48) 0%, transparent 46%);
+      filter: blur(30px);
+      pointer-events: none;
+      border-radius: 16px;
+      z-index: 1;
+    }
+    .card-exact::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg%20viewBox%3D'0%200%20256%20256'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3Cfilter%20id%3D'n'%3E%3CfeTurbulence%20type%3D'fractalNoise'%20baseFrequency%3D'0.65'%20numOctaves%3D'5'%20stitchTiles%3D'stitch'%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D'100%25'%20height%3D'100%25'%20filter%3D'url(%23n)'%2F%3E%3C%2Fsvg%3E");
+      opacity: 0.13;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      border-radius: 16px;
+      z-index: 2;
+    }
+    .card-exact > * {
+      position: relative;
+      z-index: 3;
+    }
+
+    /* ─── Generated: Vibe Fidelity ─── */
+    .card-vibe {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: linear-gradient(84deg, #232122 0%, #7E430C 100%);
+    }
+    .card-vibe::before {
+      content: '';
+      position: absolute;
+      inset: -20%;
+      background: radial-gradient(circle at 54% 45%, rgba(126,67,12,0.71) 0%, transparent 47%),
+        radial-gradient(circle at 54% 43%, rgba(151,107,81,0.61) 0%, transparent 51%),
+        radial-gradient(circle at 18% 49%, rgba(35,33,34,0.61) 0%, transparent 44%),
+        radial-gradient(circle at 59% 58%, rgba(249,248,247,0.53) 0%, transparent 57%);
+      filter: blur(40px);
+      pointer-events: none;
+      border-radius: 16px;
+      z-index: 1;
+    }
+    .card-vibe::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg%20viewBox%3D'0%200%20256%20256'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3Cfilter%20id%3D'n'%3E%3CfeTurbulence%20type%3D'fractalNoise'%20baseFrequency%3D'0.65'%20numOctaves%3D'4'%20stitchTiles%3D'stitch'%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D'100%25'%20height%3D'100%25'%20filter%3D'url(%23n)'%2F%3E%3C%2Fsvg%3E");
+      opacity: 0.13;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      border-radius: 16px;
+      z-index: 2;
+    }
+    .card-vibe > * {
+      position: relative;
+      z-index: 3;
+    }
+
+    /* ─── Generated: Inspired Fidelity ─── */
+    .card-inspired {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: linear-gradient(92deg, #30251C 0%, #8F5A30 100%);
+    }
+    .card-inspired::before {
+      content: '';
+      position: absolute;
+      inset: -10%;
+      background: radial-gradient(circle at 57% 46%, rgba(143,90,48,0.89) 0%, transparent 49%),
+        radial-gradient(circle at 23% 45%, rgba(48,37,28,0.67) 0%, transparent 45%);
+      filter: blur(20px);
+      pointer-events: none;
+      border-radius: 16px;
+      z-index: 1;
+    }
+    .card-inspired::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg%20viewBox%3D'0%200%20256%20256'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3Cfilter%20id%3D'n'%3E%3CfeTurbulence%20type%3D'fractalNoise'%20baseFrequency%3D'0.65'%20numOctaves%3D'3'%20stitchTiles%3D'stitch'%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D'100%25'%20height%3D'100%25'%20filter%3D'url(%23n)'%2F%3E%3C%2Fsvg%3E");
+      opacity: 0.13;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      border-radius: 16px;
+      z-index: 2;
+    }
+    .card-inspired > * {
+      position: relative;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <h1>GradientBro Visual Test</h1>
+  <p class="subtitle">Generated from the Healthspan testimonial cards screenshot — all three fidelity levels</p>
+
+  <div class="section">
+    <h2>Reference Image</h2>
+    <img class="ref-img" src="../.cursor/projects/Users-cheyrasmussen-GradientBro/assets/Screenshot_2026-02-09_at_4.24.55_PM-27c6de3d-b6d9-4e61-8769-cb4735d60e9f.png" alt="Reference screenshot" style="max-height: 420px; object-fit: contain;">
+  </div>
+
+  <div class="section">
+    <h2>Exact Fidelity (8 clusters, 30px blur, 5 octave noise)</h2>
+    <div class="grid">
+      <div class="card card-exact">
+        <div>
+          <h3>Impressive organization!</h3>
+          <p>The doctors and the way your programs and labs and med delivery are top notch, very professional and the accessibility of the doctors and different programs available.</p>
+          <p class="author">JAMES JERNIGAN</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Vibe Fidelity (5 clusters, 40px blur, 4 octave noise)</h2>
+    <div class="grid">
+      <div class="card card-vibe">
+        <div>
+          <h3>Great experience with Healthspan</h3>
+          <p>I've had a great experience with Healthspan. All of the representatives have been extremely responsive when sending messages on the portal.</p>
+          <p class="author">ANTHONY BADILLO</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Inspired Fidelity (3 clusters, 20px blur, 3 octave noise)</h2>
+    <div class="grid">
+      <div class="card card-inspired">
+        <div>
+          <h3>Grateful for Healthspan</h3>
+          <p>The most knowledgeable team. Helped me evaluate my labs and put together a plan to start optimizing things.</p>
+          <p class="author">DANNY</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
