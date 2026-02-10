@@ -1,7 +1,13 @@
 /**
- * Image loading utilities using sharp.
+ * Image loading utilities using jimp (pure JS, zero native deps).
+ * Only the formats and plugins GradientBro needs are loaded.
  */
-import sharp from "sharp";
+import { createJimp } from "@jimp/core";
+import png from "@jimp/js-png";
+import jpeg from "@jimp/js-jpeg";
+import * as resize from "@jimp/plugin-resize";
+
+const Jimp = createJimp({ formats: [png, jpeg], plugins: [resize.methods] });
 
 export interface RawImageData {
   /** Raw pixel buffer, 3 bytes per pixel (RGB) */
@@ -21,20 +27,29 @@ export async function loadImage(
   imagePath: string,
   resizeTo: number = 100
 ): Promise<RawImageData> {
-  const metadata = await sharp(imagePath).metadata();
-  const originalWidth = metadata.width ?? resizeTo;
-  const originalHeight = metadata.height ?? resizeTo;
+  const image = await Jimp.read(imagePath);
+  const originalWidth = image.width;
+  const originalHeight = image.height;
 
-  const { data, info } = await sharp(imagePath)
-    .resize(resizeTo, resizeTo, { fit: "fill" })
-    .removeAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
+  // Resize to target dimensions
+  image.resize({ w: resizeTo, h: resizeTo });
+
+  const width = image.bitmap.width;
+  const height = image.bitmap.height;
+
+  // Convert RGBA (4 bytes/pixel from jimp) to RGB (3 bytes/pixel)
+  const rgba = image.bitmap.data;
+  const rgb = Buffer.alloc(width * height * 3);
+  for (let i = 0, j = 0; i < rgba.length; i += 4, j += 3) {
+    rgb[j] = rgba[i]; // R
+    rgb[j + 1] = rgba[i + 1]; // G
+    rgb[j + 2] = rgba[i + 2]; // B
+  }
 
   return {
-    data,
-    width: info.width,
-    height: info.height,
+    data: rgb,
+    width,
+    height,
     originalWidth,
     originalHeight,
   };
