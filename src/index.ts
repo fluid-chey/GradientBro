@@ -15,6 +15,11 @@ export type {
   BlurInfo,
   VignetteInfo,
   MoodInfo,
+  ShapeInfo,
+  ShapeContour,
+  ShapeType,
+  ShapeStyle,
+  Point2D,
   FidelityLevel,
   GeneratorOptions,
 } from "./types";

@@ -1,21 +1,50 @@
 /**
  * Strategy classifier.
  *
- * Examines the colour regions, their spatial distribution, and edge
- * sharpness variance to recommend which CSS generation strategy will
- * best reproduce the reference gradient:
+ * Examines the colour regions, their spatial distribution, edge
+ * sharpness variance, and shape analysis to recommend which CSS
+ * generation strategy will best reproduce the reference gradient:
  *
  *  - "simple"  — linear base + blurred radial blobs (fast, clean)
  *  - "mesh"    — multi-layer positioned radials with per-group blur
  *  - "hybrid"  — linear/radial base + mesh accent layers for depth
+ *  - "organic" — inline SVG with per-shape blur filters for complex
+ *                shapes (waves, wisps, veils, ribbons, petals)
  */
 
-import { ColorRegion, GradientStrategy } from "../types";
+import { ColorRegion, GradientStrategy, ShapeInfo } from "../types";
 
 /**
- * Classify the optimal gradient strategy from colour region data.
+ * Classify the optimal gradient strategy from colour region and shape data.
  */
-export function classifyStrategy(colors: ColorRegion[]): GradientStrategy {
+export function classifyStrategy(
+  colors: ColorRegion[],
+  shapes?: ShapeInfo
+): GradientStrategy {
+  // ── Organic: non-trivial shapes detected ────────────────────────────
+  // Gated on edge sharpness: smooth gradients where ALL cluster edges
+  // are very diffuse produce shape-analysis artefacts (k-means always
+  // creates regions, even in smooth blends). Only trigger organic when
+  // the image has at least some defined boundaries OR high complexity.
+  if (shapes && shapes.style !== "blobby" && shapes.contours.length >= 2) {
+    const maxEdgeSharpness = Math.max(...colors.map((c) => c.edgeSharpness));
+    // Tiered triggers — smoother images need stronger evidence of real shapes
+    const hasDefinedEdges = maxEdgeSharpness > 0.25;
+    const isComplex = shapes.complexity > 0.6 && maxEdgeSharpness > 0.12;
+    // Waves and petals are shapes CSS fundamentally can't reproduce;
+    // trigger organic even in soft images if multiple are found — but
+    // require at least minimal edge definition (maxSharpness > 0.12)
+    // to filter out smooth blends where k-means produces spurious waves
+    const waveCount = shapes.contours.filter((c) => c.type === "wave").length;
+    const petalCount = shapes.contours.filter((c) => c.type === "petal").length;
+    const hasDistinctiveShapes =
+      (waveCount >= 2 || petalCount >= 2) && maxEdgeSharpness > 0.12;
+
+    if (hasDefinedEdges || isComplex || hasDistinctiveShapes) {
+      return "organic";
+    }
+  }
+
   if (colors.length <= 2) return "simple";
 
   // ── Factor 1: Number of distinct regions ───────────────────────────

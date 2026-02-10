@@ -3,11 +3,39 @@
  *
  * Extracts dominant color regions from raw pixel data, returning
  * each cluster's average color, centroid position, weight, and spread.
+ *
+ * Uses a deterministic seeded PRNG so the same image always produces
+ * the same clusters (important for stable shape analysis).
  */
 
 import { RawImageData, getPixel } from "../utils/image";
 import { rgbToHex, colorDistance } from "../utils/color";
 import { ColorRegion } from "../types";
+
+/**
+ * Simple seeded PRNG (mulberry32). Deterministic given the same seed.
+ * Returns a function that produces values in [0, 1).
+ */
+function createRng(seed: number): () => number {
+  let s = seed | 0;
+  return () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Derive a deterministic seed from image pixel data. */
+function seedFromImage(img: RawImageData): number {
+  let hash = 0;
+  // Sample ~200 evenly spaced bytes for speed
+  const step = Math.max(1, Math.floor(img.data.length / 200));
+  for (let i = 0; i < img.data.length; i += step) {
+    hash = ((hash << 5) - hash + img.data[i]) | 0;
+  }
+  return hash;
+}
 
 interface PixelSample {
   r: number;
@@ -51,8 +79,9 @@ export function extractColors(
     }
   }
 
-  // 2. Initialise centroids using k-means++ seeding
-  const centroids = kMeansPlusPlusInit(samples, k);
+  // 2. Initialise centroids using k-means++ seeding (deterministic)
+  const rng = createRng(seedFromImage(img));
+  const centroids = kMeansPlusPlusInit(samples, k, rng);
 
   // 3. Iterate: assign pixels to nearest centroid, recompute centroids
   const assignments = new Int32Array(samples.length);
@@ -162,12 +191,13 @@ export function extractColors(
 /** K-means++ initialisation: pick initial centroids spread apart. */
 function kMeansPlusPlusInit(
   samples: PixelSample[],
-  k: number
+  k: number,
+  rng: () => number
 ): Centroid[] {
   const centroids: Centroid[] = [];
 
-  // Pick the first centroid randomly
-  const first = samples[Math.floor(Math.random() * samples.length)];
+  // Pick the first centroid deterministically
+  const first = samples[Math.floor(rng() * samples.length)];
   centroids.push({ r: first.r, g: first.g, b: first.b, x: first.x, y: first.y });
 
   for (let c = 1; c < k; c++) {
@@ -183,7 +213,7 @@ function kMeansPlusPlusInit(
 
     // Pick next centroid proportional to distance squared
     const totalDist = distances.reduce((a, b) => a + b, 0);
-    let r = Math.random() * totalDist;
+    let r = rng() * totalDist;
     let idx = 0;
     for (let i = 0; i < distances.length; i++) {
       r -= distances[i];

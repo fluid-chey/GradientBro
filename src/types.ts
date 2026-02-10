@@ -59,8 +59,81 @@ export interface MoodInfo {
   brightness: "dark" | "medium-dark" | "medium" | "medium-bright" | "bright";
 }
 
+/** A 2D point, normalised 0-1 relative to image dimensions. */
+export interface Point2D {
+  x: number;
+  y: number;
+}
+
+/** Shape types that GradientBro can detect and generate as SVG. */
+export type ShapeType =
+  | "wave"
+  | "wisp"
+  | "veil"
+  | "angular-veil"
+  | "ribbon"
+  | "petal";
+
+/**
+ * A detected shape contour — provides hints for SVG path generation.
+ * The AI agent uses these as scaffolding but writes the actual bezier paths.
+ */
+export interface ShapeContour {
+  /** Which shape archetype this contour matches */
+  type: ShapeType;
+  /** Bounding region centre, normalised 0-1 */
+  position: Point2D;
+  /** Dominant direction in degrees (0 = right, 90 = down) */
+  direction: number;
+  /** For waves: oscillation amplitude relative to container, 0-1 */
+  amplitude?: number;
+  /** For waves: number of oscillations across the shape length */
+  frequency?: number;
+  /** For wisps/ribbons/petals: start point, normalised 0-1 */
+  startPoint?: Point2D;
+  /** For wisps/ribbons/petals: end point, normalised 0-1 */
+  endPoint?: Point2D;
+  /** For petals: the pointed tip, normalised 0-1 */
+  tipPoint?: Point2D;
+  /** For petals: width of the rounded body relative to length, 0-1 */
+  bodyWidth?: number;
+  /** For angular-veils: vertex points defining angular edges, normalised 0-1 */
+  vertices?: Point2D[];
+  /** Curvature amount: 0 = straight, 1 = heavily curved */
+  curvature: number;
+  /** Relative thickness of the shape, 0-1 */
+  thickness: number;
+  /** How blurred this contour is: 0 = crisp, 1 = deeply diffuse */
+  blur: number;
+  /** Associated colour hex from nearest colour cluster */
+  color: string;
+  /** Opacity, 0-1 */
+  opacity: number;
+}
+
+/** Summary of dominant shape style. */
+export type ShapeStyle =
+  | "blobby"
+  | "wispy"
+  | "wavy"
+  | "angular"
+  | "organic"
+  | "mixed";
+
+/** Shape analysis results — present when non-trivial shapes are detected. */
+export interface ShapeInfo {
+  /** Overall shape complexity, 0-1 */
+  complexity: number;
+  /** Dominant flow direction in degrees */
+  flowDirection: number;
+  /** Dominant shape style */
+  style: ShapeStyle;
+  /** Extracted simplified contour descriptors */
+  contours: ShapeContour[];
+}
+
 /** Which CSS generation strategy to use. */
-export type GradientStrategy = "simple" | "mesh" | "hybrid";
+export type GradientStrategy = "simple" | "mesh" | "hybrid" | "organic";
 
 /** The full gradient specification output by the analyzer. */
 export interface GradientSpec {
@@ -72,6 +145,8 @@ export interface GradientSpec {
   mood: MoodInfo;
   /** Recommended CSS generation strategy based on image characteristics. */
   strategy: GradientStrategy;
+  /** Shape analysis — present when organic shapes detected. */
+  shapes?: ShapeInfo;
 }
 
 /** Fidelity level that controls generation detail. */
