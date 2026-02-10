@@ -24,13 +24,13 @@ function turbulenceParams(
   // via the refinement guide or override presets in the skill.
   const baseFrequency = 0.45;
 
-  // ── numOctaves: driven by fidelity level ───────────────────────────
-  const numOctaves = fidelity === "exact" ? 6 : fidelity === "vibe" ? 5 : 3;
+  // ── numOctaves: always maximum crispness ────────────────────────────
+  const numOctaves = 6;
 
-  // ── opacity: fixed at full strength ────────────────────────────────
-  // With mix-blend-mode: overlay, 1.0 opacity produces pronounced,
+  // ── opacity: near-full strength ─────────────────────────────────────
+  // With mix-blend-mode: overlay, 0.9 opacity produces pronounced,
   // clearly visible grain without obscuring the gradient underneath.
-  const opacity = 1.0;
+  const opacity = 0.9;
 
   // ── blend mode: always overlay ─────────────────────────────────────
   const blendMode = "overlay";

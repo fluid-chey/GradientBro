@@ -268,11 +268,11 @@ Grain uses strong fixed defaults — do NOT derive values from the analyser's
 | Parameter       | Default | Range       | Effect                            |
 |-----------------|---------|-------------|-----------------------------------|
 | `baseFrequency` | `0.45`  | 0.30 – 1.0 | Grain size (lower = coarser)      |
-| `numOctaves`    | `5`     | 2 – 6       | Crispness (higher = sharper)      |
-| `opacity`       | `1.0`   | 0.03 – 1.0 | Visibility (with overlay blend)   |
+| `numOctaves`    | `6`     | 2 – 6       | Crispness (higher = sharper)      |
+| `opacity`       | `0.9`   | 0.03 – 1.0 | Visibility (with overlay blend)   |
 
-These defaults produce a coarse, pronounced, full-strength grain texture.
-With `mix-blend-mode: overlay`, opacity 1.0 creates maximum grain impact
+These defaults produce a coarse, pronounced grain texture. With
+`mix-blend-mode: overlay`, opacity 0.9 creates strong grain impact
 without obscuring the gradient underneath.
 
 **User override presets** (apply when user requests a specific grain style):
@@ -282,7 +282,7 @@ without obscuring the gradient underneath.
 | "subtle" / "light grain"  | 0.75          | 3          | 0.08    |
 | "film-like"               | 0.55          | 4          | 0.50    |
 | "coarse" / "chunky"       | 0.30          | 3          | 0.80    |
-| "maximum grain"            | 0.45 (default)| 5          | 1.0 + `filter: contrast(2.5)` |
+| "maximum grain"            | 0.45 (default)| 6          | 1.0 + `filter: contrast(2.5)` |
 | "no grain"                 | —             | —          | — (omit `::after`) |
 
 **Beyond opacity 1.0 — contrast boost:** When the user wants grain more

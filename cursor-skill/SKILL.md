@@ -278,8 +278,8 @@ Every gradient gets a strong, high-res, crisp grain overlay by default. Do NOT d
 | Parameter       | Default value | Effect                                    |
 |-----------------|---------------|-------------------------------------------|
 | `baseFrequency` | `0.45`        | Coarse, textural grain                    |
-| `numOctaves`    | `5`           | Crisp texture with good detail (vibe)     |
-| `opacity`       | `1.0`         | Full-strength grain via overlay blend     |
+| `numOctaves`    | `6`           | Maximum crispness — sharp, defined grain  |
+| `opacity`       | `0.9`         | Near-full-strength grain via overlay blend |
 | `blend mode`    | `overlay`     | Always overlay — works on both dark and light |
 
 **User overrides:** If the user specifies grain preferences in their request (e.g. "subtle grain", "no grain", "film-like grain", "coarse grain"), adjust accordingly:

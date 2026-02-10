@@ -50,12 +50,12 @@ requests to specific CSS parameter changes.
 ### Noise Opacity
 
 The default grain is coarse and full-strength: `baseFrequency='0.45'`,
-`numOctaves='5'`, `opacity: 1.0`, `mix-blend-mode: overlay`. All
+`numOctaves='6'`, `opacity: 0.9`, `mix-blend-mode: overlay`. All
 refinements adjust from this baseline.
 
 ```css
-/* Default: full-strength coarse grain */
-.container::after { opacity: 1.0; }
+/* Default: near-full-strength coarse grain */
+.container::after { opacity: 0.9; }
 
 /* After: "less grain" */
 .container::after { opacity: 0.6; }
@@ -65,7 +65,7 @@ refinements adjust from this baseline.
 ```
 
 - Minimum sensible: 0.03 (barely perceptible)
-- Maximum sensible: 1.0 (full-strength, the default)
+- Maximum sensible: 1.0 (full-strength; default is 0.9)
 - Step size: 0.10 – 0.15 per refinement
 
 ### Grain Contrast Boost (filter: contrast)
@@ -90,7 +90,7 @@ making each grain particle bite harder.
 ```
 
 **Escalation order** when the user keeps asking for more grain:
-1. First ensure `opacity: 1.0` (the default)
+1. First increase `opacity` to 1.0 (default is 0.9)
 2. Add `filter: contrast(1.5)` — noticeable bump
 3. Increase to `contrast(2.0)` — strong, textured
 4. Increase to `contrast(3.0)` — very aggressive
