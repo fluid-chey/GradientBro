@@ -48,14 +48,18 @@ requests to specific CSS parameter changes.
 
 ### Noise Opacity
 
-Current value is typically in the range 0.03 – 0.50 (wider range than before).
+The default grain is fine, crisp, and pronounced: `baseFrequency='0.9'`,
+`numOctaves='6'`, `opacity: 0.45`. All refinements adjust from this baseline.
 
 ```css
-/* Before: subtle grain */
-.container::after { opacity: 0.08; }
+/* Default: pronounced crisp grain */
+.container::after { opacity: 0.45; }
 
 /* After: "more grain" */
-.container::after { opacity: 0.16; }
+.container::after { opacity: 0.55; }
+
+/* After: "less grain" */
+.container::after { opacity: 0.30; }
 ```
 
 - Minimum sensible: 0.03 (barely perceptible)
@@ -186,6 +190,128 @@ radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.40) 100%)
 
 Adjust both the transparent stop position (tighter = stronger) and the
 edge opacity.
+
+---
+
+## SVG Shape Refinements (Organic Strategy)
+
+When the output uses inline SVG shapes, these additional refinement
+mappings apply. Modify the SVG `<path>` elements and `<filter>` definitions
+directly.
+
+### Shape Blur
+
+```xml
+<!-- Before: medium blur -->
+<path d="..." filter="url(#b3)"/>
+
+<!-- "sharper shapes" → move to crisp tier -->
+<path d="..." filter="url(#b5)"/>
+
+<!-- "softer / dreamier" → move to heavy tier -->
+<path d="..." filter="url(#b2)"/>
+```
+
+To adjust a specific tier's blur amount:
+```xml
+<!-- Before -->
+<filter id="b3"><feGaussianBlur stdDeviation="4"/></filter>
+
+<!-- "slightly sharper overall" -->
+<filter id="b3"><feGaussianBlur stdDeviation="3"/></filter>
+```
+
+### Wave Parameters
+
+| User says | SVG change |
+|-----------|-----------|
+| "tighter waves" / "more frequent" | Add more S-curve segments, reduce amplitude of control points |
+| "broader waves" | Increase Y-offset of control points, remove S-curve segments |
+| "thicker wave bands" | Increase the gap between upper and lower path edges |
+| "thinner wave bands" | Decrease the gap between upper and lower path edges |
+| "rotate the waves" | Adjust X/Y coordinates to change the sweep direction |
+
+### Petal Parameters
+
+| User says | SVG change |
+|-----------|-----------|
+| "rounder petals" | Widen the control point spread (bodyWidth), reduce curvature at tip |
+| "sharper / pointier petals" | Tighten control points near the tip, increase curvature |
+| "bigger petals" | Scale the path coordinates outward from centroid |
+| "more petals" | Duplicate a `<path>` element, rotate and reposition |
+
+### Shape Opacity and Overlap
+
+```xml
+<!-- Before: moderate overlap -->
+<path d="..." fill="rgba(200,130,60,0.5)" filter="url(#b3)"/>
+
+<!-- "more overlap / richer colour mixing" -->
+<path d="..." fill="rgba(200,130,60,0.7)" filter="url(#b3)"/>
+
+<!-- "less overlap / cleaner" -->
+<path d="..." fill="rgba(200,130,60,0.3)" filter="url(#b3)"/>
+```
+
+Step size: 0.10–0.15 per refinement.
+
+### Shape Position
+
+```xml
+<!-- Before: shape at center-right -->
+<path d="M60,30 C70,20 80,40 90,35 ..." />
+
+<!-- "shift the wave left" → subtract 15-20 from X coordinates -->
+<path d="M40,30 C50,20 60,40 70,35 ..." />
+```
+
+Step size: 10-15 units (in viewBox 0-100 space) per refinement.
+
+### Adding / Removing Shapes
+
+To add a shape, insert a new `<path>` element in the SVG at the appropriate
+depth position (before existing foreground shapes for background, after for
+foreground).
+
+To remove a shape, delete the `<path>` element.
+
+### Depth Adjustment
+
+```xml
+<!-- Before: moderate depth -->
+<filter id="b1"><feGaussianBlur stdDeviation="12"/></filter>
+<filter id="b5"><feGaussianBlur stdDeviation="0.8"/></filter>
+
+<!-- "more depth" → increase background blur, decrease foreground blur -->
+<filter id="b1"><feGaussianBlur stdDeviation="16"/></filter>
+<filter id="b5"><feGaussianBlur stdDeviation="0.5"/></filter>
+
+<!-- "flatter" → converge blur values -->
+<filter id="b1"><feGaussianBlur stdDeviation="8"/></filter>
+<filter id="b5"><feGaussianBlur stdDeviation="2"/></filter>
+```
+
+---
+
+## Photo-Derived Gradient Refinements
+
+When the gradient was generated from a photograph (using the painterly
+layering approach), these additional refinement mappings apply.
+
+| User says | What to change |
+|-----------|---------------|
+| "more detail" / "richer" | Add shapes to Pass 2-3, use more colour variants from the photo |
+| "too busy" / "simpler" | Remove Pass 2 shapes, merge similar colours into fewer shapes |
+| "the sky needs more texture" | Add cloud wisps (stroked paths) to the upper zone at b3 |
+| "the sky is too flat" | Split single sky veil into 2-3 colour-banded horizontal shapes |
+| "the focal point needs more punch" | Add another radiance ring, increase core opacity, or move core to b5 |
+| "the focal point is too harsh" | Remove the crisp core ring, soften inner ring from b4 to b3 |
+| "the colours don't match the photo" | Re-examine the photo's palette, pull hex values directly from zones |
+| "needs more warm/cool contrast" | Increase saturation on warm shapes, push cool shapes bluer |
+| "it's too abstract" / "closer to the photo" | Add more Pass 3-4 shapes to capture transitional zones |
+| "it's too literal" / "more abstract" | Remove Pass 3-4 detail shapes, keep only Pass 1-2 washes |
+| "the horizon needs to be sharper" | Move the horizon ribbon to a crisper blur tier (b3 → b4 or b5) |
+| "add cloud texture" | Insert 3-5 cloud wisps with varying Y positions and stroke widths |
 
 ---
 

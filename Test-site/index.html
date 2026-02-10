@@ -91,8 +91,8 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.46' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.18;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.45;
       mix-blend-mode: overlay;
       z-index: 2;
       pointer-events: none;
@@ -100,36 +100,31 @@
     }
 
     /* ============================================================
-       GRADIENT: Olive/Dark (portrait ref → card one)
-       Near-black centre, olive-gold glow top-left + bottom-left.
+       GRADIENT: Windows Bliss (organic → card one)
+       Vivid blue sky, white clouds, green rolling hill.
        ============================================================ */
-    .grad-olive {
+    .grad-bliss {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(155deg, #1a1914 0%, #111014 40%, #0e0d11 100%);
-    }
-    .grad-olive > * { position: relative; z-index: 3; }
-    .grad-olive::before {
-      content: '';
-      position: absolute;
-      inset: -30%;
       background:
-        radial-gradient(circle at 12% 12%, rgba(135, 129, 86, 0.85) 0%, transparent 35%),
-        radial-gradient(circle at 5% 45%, rgba(99, 95, 67, 0.45) 0%, transparent 28%),
-        radial-gradient(circle at 22% 88%, rgba(135, 129, 86, 0.7) 0%, transparent 32%),
-        radial-gradient(circle at 50% 95%, rgba(68, 65, 51, 0.5) 0%, transparent 35%),
-        radial-gradient(circle at 78% 92%, rgba(99, 95, 67, 0.35) 0%, transparent 28%),
-        radial-gradient(circle at 50% 48%, rgba(20, 19, 24, 0.9) 0%, transparent 55%);
-      filter: blur(60px);
+        radial-gradient(ellipse at 45% 42%, rgba(175,198,240,0.5) 0%, transparent 35%),
+        linear-gradient(180deg, #0e43d1 0%, #3c74eb 30%, #6c8f21 55%, #273c17 100%);
+    }
+    .grad-bliss > * { position: relative; z-index: 3; }
+    .grad-bliss .gradient-shapes-c1 {
+      position: absolute;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
       z-index: 1;
       pointer-events: none;
     }
-    .grad-olive::after {
+    .grad-bliss::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.14;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.55;
       mix-blend-mode: overlay;
       z-index: 2;
       pointer-events: none;
@@ -137,76 +132,63 @@
     }
 
     /* ============================================================
-       GRADIENT: Peach/Pink (portrait ref → card two)
-       Warm terracotta top, soft rose-pink bottom, lavender-blue
-       accent at right-centre, golden glow left-centre.
+       GRADIENT: Dark Curves (hybrid → card two)
+       Near-total black with elegant bright curved ridgelines.
        ============================================================ */
-    .grad-peach {
+    .grad-darkcurves {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(170deg, #7f3b26 0%, #995340 35%, #d4b1ad 100%);
+      background: #010101;
     }
-    .grad-peach > * { position: relative; z-index: 3; }
-    .grad-peach::before {
-      content: '';
+    .grad-darkcurves > * { position: relative; z-index: 3; }
+    .grad-darkcurves .gradient-shapes-c2 {
       position: absolute;
-      inset: -30%;
-      background:
-        radial-gradient(circle at 50% 8%, rgba(187, 120, 91, 0.8) 0%, transparent 35%),
-        radial-gradient(circle at 60% 25%, rgba(127, 59, 38, 0.7) 0%, transparent 30%),
-        radial-gradient(circle at 40% 40%, rgba(153, 83, 64, 0.65) 0%, transparent 35%),
-        radial-gradient(circle at 15% 58%, rgba(210, 180, 80, 0.4) 0%, transparent 25%),
-        radial-gradient(circle at 75% 62%, rgba(120, 110, 190, 0.55) 0%, transparent 28%),
-        radial-gradient(circle at 30% 85%, rgba(212, 177, 173, 0.7) 0%, transparent 35%),
-        radial-gradient(circle at 70% 80%, rgba(183, 141, 145, 0.5) 0%, transparent 30%);
-      filter: blur(50px);
+      inset: -20%;
+      width: 140%;
+      height: 140%;
       z-index: 1;
       pointer-events: none;
     }
-    .grad-peach::after {
+    .grad-darkcurves::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.73' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.16;
-      mix-blend-mode: soft-light;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.45;
+      mix-blend-mode: overlay;
       z-index: 2;
       pointer-events: none;
       border-radius: inherit;
     }
 
     /* ============================================================
-       GRADIENT: Amber/Gold (portrait ref → card three)
-       Rich monochrome amber, darker left, brighter golden right
-       and bottom-right corner glow.
+       GRADIENT: Orange Petals (organic strategy → card three)
+       Rich amber base with organic petal/flame shapes sweeping
+       upward, golden highlights between forms, pale blue-white
+       accent in upper-left corner. Warm, botanical feel.
        ============================================================ */
-    .grad-amber {
+    .grad-pastel {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, #3d2200 0%, #6e3c00 40%, #8a4e00 100%);
-    }
-    .grad-amber > * { position: relative; z-index: 3; }
-    .grad-amber::before {
-      content: '';
-      position: absolute;
-      inset: -30%;
       background:
-        radial-gradient(circle at 15% 25%, rgba(95, 49, 0, 0.8) 0%, transparent 35%),
-        radial-gradient(circle at 35% 50%, rgba(115, 60, 0, 0.7) 0%, transparent 38%),
-        radial-gradient(circle at 60% 45%, rgba(134, 71, 0, 0.65) 0%, transparent 40%),
-        radial-gradient(circle at 82% 50%, rgba(151, 82, 0, 0.75) 0%, transparent 38%),
-        radial-gradient(circle at 88% 90%, rgba(187, 112, 0, 0.8) 0%, transparent 30%),
-        radial-gradient(circle at 70% 85%, rgba(200, 130, 10, 0.5) 0%, transparent 35%);
-      filter: blur(65px);
+        radial-gradient(ellipse at 50% 50%, rgba(240,238,250,0.5) 0%, transparent 40%),
+        linear-gradient(135deg, #9bb1fc 0%, #b6bdfc 25%, #cfc3fc 50%, #e595f1 75%, #a06ff6 100%);
+    }
+    .grad-pastel > * { position: relative; z-index: 3; }
+    .grad-pastel .gradient-shapes-c3 {
+      position: absolute;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
       z-index: 1;
       pointer-events: none;
     }
-    .grad-amber::after {
+    .grad-pastel::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.56' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.10;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.55;
       mix-blend-mode: overlay;
       z-index: 2;
       pointer-events: none;
@@ -226,9 +208,9 @@
     .grad-waves > * { position: relative; z-index: 3; }
     .grad-waves .gradient-shapes {
       position: absolute;
-      inset: -15%;
-      width: 130%;
-      height: 130%;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
       z-index: 1;
       pointer-events: none;
     }
@@ -236,8 +218,8 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.20;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.45;
       mix-blend-mode: overlay;
       z-index: 2;
       pointer-events: none;
@@ -290,15 +272,167 @@
   <div class="section-label">CSS Strategy (simple / mesh / hybrid)</div>
 
   <div class="card-grid">
-    <div class="card grad-olive">
+    <div class="card grad-bliss">
+      <svg class="gradient-shapes-c1" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="c1b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+          <filter id="c1b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter>
+          <filter id="c1b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.5"/></filter>
+          <!-- Cloud mass gradient fills -->
+          <radialGradient id="c1cloud1" cx="50%" cy="40%" r="55%">
+            <stop offset="0%" stop-color="rgb(230,238,250)" stop-opacity="0.85"/>
+            <stop offset="50%" stop-color="rgb(210,225,248)" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="rgb(190,210,242)" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="c1cloud2" cx="50%" cy="45%" r="50%">
+            <stop offset="0%" stop-color="rgb(220,232,248)" stop-opacity="0.75"/>
+            <stop offset="55%" stop-color="rgb(200,218,245)" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="rgb(180,205,240)" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="c1cloud3" cx="55%" cy="40%" r="50%">
+            <stop offset="0%" stop-color="rgb(235,242,252)" stop-opacity="0.7"/>
+            <stop offset="50%" stop-color="rgb(215,228,248)" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="rgb(195,215,244)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- BG: deep blue upper sky (b2) -->
+        <path d="M-15,-15 H115 V16 Q80,20 50,18 Q20,16 -15,20 Z"
+              fill="rgba(14,67,209,0.95)" filter="url(#c1b2)"/>
+        <!-- MID: medium blue mid-sky (b3) -->
+        <path d="M-15,12 H115 V34 Q80,38 50,36 Q20,34 -15,38 Z"
+              fill="rgba(60,116,235,0.92)" filter="url(#c1b3)"/>
+        <!-- FG: light blue near horizon (b4) -->
+        <path d="M-15,30 H115 V46 Q80,50 50,48 Q20,46 -15,50 Z"
+              fill="rgba(115,155,238,0.9)" filter="url(#c1b4)"/>
+        <!-- FG: cloud mass — large puffy cloud right of centre (gradient fill, b3) -->
+        <path d="M45,16 Q55,10 68,13 Q78,17 80,24 Q78,30 68,33 Q55,32 46,28 Q42,22 45,16 Z"
+              fill="url(#c1cloud1)" filter="url(#c1b3)"/>
+        <!-- FG: cloud mass — smaller cloud left (gradient fill, b4 sharper) -->
+        <path d="M18,20 Q26,15 36,18 Q42,22 40,28 Q36,32 26,30 Q18,27 16,24 Q16,22 18,20 Z"
+              fill="url(#c1cloud2)" filter="url(#c1b4)"/>
+        <!-- FG: cloud mass — wispy high cloud (gradient fill, b3) -->
+        <path d="M58,10 Q68,7 80,9 Q88,13 85,18 Q78,20 68,18 Q60,15 58,10 Z"
+              fill="url(#c1cloud3)" filter="url(#c1b3)"/>
+        <!-- SUB-BLOCK: dark green upper slope of hill (b3 — moderate) -->
+        <path d="M-15,52 Q10,46 30,40 Q50,34 70,40 Q90,46 115,50
+               V60 Q90,56 70,52 Q50,48 30,52 Q10,56 -15,62 Z"
+              fill="rgba(69,94,33,0.92)" filter="url(#c1b3)"/>
+        <!-- SUB-BLOCK: bright vivid green sunlit band — the highlight (b4 — sharp, pops) -->
+        <path d="M-15,58 Q10,52 30,48 Q50,44 70,48 Q90,52 115,56
+               V68 Q90,64 70,60 Q50,56 30,60 Q10,64 -15,70 Z"
+              fill="rgba(120,160,35,0.95)" filter="url(#c1b4)"/>
+        <!-- SUB-BLOCK: medium-dark green lower slope (b3 — moderate) -->
+        <path d="M-15,65 Q20,60 50,58 Q80,60 115,64
+               V82 Q80,80 50,78 Q20,76 -15,80 Z"
+              fill="rgba(55,80,28,0.92)" filter="url(#c1b3)"/>
+        <!-- BG: dark green shadow at very bottom (b2) -->
+        <path d="M-15,78 Q20,74 50,76 Q80,78 115,74 V115 H-15 Z"
+              fill="rgba(19,34,15,0.92)" filter="url(#c1b2)"/>
+        <!-- PHASE 2: sky/hill boundary blend -->
+        <path d="M-15,42 H115 V56 Q80,60 50,54 Q20,48 -15,54 Z"
+              fill="rgba(80,120,130,0.25)" filter="url(#c1b3)"/>
+      </svg>
       <h2>Card One</h2>
       <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Maecenas faucibus mollis interdum. Cras mattis consectetur purus sit amet fermentum.</p>
     </div>
-    <div class="card grad-peach">
+    <div class="card grad-darkcurves">
+      <svg class="gradient-shapes-c2" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="c2b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+          <filter id="c2b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter>
+          <filter id="c2b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>
+          <!-- Gradient fills: curves glow from bright centre to transparent edges -->
+          <linearGradient id="c2curve1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgb(210,210,210)" stop-opacity="0"/>
+            <stop offset="35%" stop-color="rgb(200,200,200)" stop-opacity="0.75"/>
+            <stop offset="65%" stop-color="rgb(200,200,200)" stop-opacity="0.75"/>
+            <stop offset="100%" stop-color="rgb(180,180,180)" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="c2curve2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgb(190,190,190)" stop-opacity="0"/>
+            <stop offset="35%" stop-color="rgb(175,175,175)" stop-opacity="0.65"/>
+            <stop offset="65%" stop-color="rgb(175,175,175)" stop-opacity="0.65"/>
+            <stop offset="100%" stop-color="rgb(160,160,160)" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="c2specular" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgb(220,220,220)" stop-opacity="0.8"/>
+            <stop offset="60%" stop-color="rgb(200,200,200)" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="rgb(180,180,180)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- BG: subtle dark grey ambient glow behind curves (b2 — atmospheric) -->
+        <path d="M-10,28 Q20,22 50,26 Q80,30 110,36
+               V58 Q80,52 50,50 Q20,47 -10,44 Z"
+              fill="rgba(20,20,20,0.85)" filter="url(#c2b2)"/>
+        <!-- MID: main curve body — gradient fill, bright centre fades to nothing (b3) -->
+        <path d="M-15,48 C10,42 25,36 40,32
+               C55,28 70,30 85,34 C100,38 110,42 120,46
+               V58 C110,54 100,50 85,48
+               C70,44 55,42 40,46 C25,50 10,56 -15,62 Z"
+              fill="url(#c2curve1)" filter="url(#c2b3)"/>
+        <!-- MID: second curve body — gradient fill (b3) -->
+        <path d="M-20,34 C5,38 20,44 35,48
+               C50,52 65,50 80,44 Q95,38 110,36
+               V48 Q95,46 80,50 C65,56 50,58 35,54
+               C20,50 5,44 -20,40 Z"
+              fill="url(#c2curve2)" filter="url(#c2b3)"/>
+        <!-- FG: bright ridge on main curve — defined edge (b4) -->
+        <path d="M-12,50 C10,46 25,38 42,34
+               C58,30 72,32 88,36 C100,40 112,44 118,46
+               V48 C112,46 100,42 88,40
+               C72,36 58,34 42,38 C25,42 10,50 -12,54 Z"
+              fill="rgba(210,210,210,0.7)" filter="url(#c2b4)"/>
+        <!-- FG: bright ridge on second curve (b4) -->
+        <path d="M-18,38 C5,42 20,48 36,52
+               C52,56 66,54 82,48 Q94,42 106,40
+               V42 Q94,44 82,50 C66,56 52,58 36,54
+               C20,50 5,44 -18,40 Z"
+              fill="rgba(195,195,195,0.65)" filter="url(#c2b4)"/>
+        <!-- FG: specular glow at curve intersection — radial gradient fill (b4) -->
+        <path d="M28,40 Q38,34 52,38 Q62,44 55,52 Q44,54 34,48 Q26,44 28,40 Z"
+              fill="url(#c2specular)" filter="url(#c2b4)"/>
+      </svg>
       <h2>Card Two</h2>
       <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
     </div>
-    <div class="card grad-amber">
+    <div class="card grad-pastel">
+      <svg class="gradient-shapes-c3" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="c3b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+          <filter id="c3b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter>
+          <filter id="c3b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.5"/></filter>
+        </defs>
+        <!-- BG: blue-lavender left zone (b2) -->
+        <path d="M-15,-15 Q20,-15 30,10 Q35,35 20,55 Q5,70 -15,75 Z"
+              fill="rgba(155,177,252,0.9)" filter="url(#c3b2)"/>
+        <!-- BG: soft periwinkle centre-upper (b2) -->
+        <path d="M20,-15 H80 V45 Q60,50 40,42 Q25,32 20,-15 Z"
+              fill="rgba(182,189,252,0.9)" filter="url(#c3b2)"/>
+        <!-- MID: lavender-pink upper-right (b3) -->
+        <path d="M65,-15 H115 V50 Q100,55 85,48 Q72,38 65,-15 Z"
+              fill="rgba(207,195,252,0.88)" filter="url(#c3b3)"/>
+        <!-- MID: orchid-pink right zone (b3) -->
+        <path d="M70,30 Q90,25 115,35 V85 Q95,90 75,82 Q60,70 70,30 Z"
+              fill="rgba(229,149,241,0.88)" filter="url(#c3b3)"/>
+        <!-- BG: purple-indigo left edge (b2) -->
+        <path d="M-15,50 Q0,42 10,55 Q15,72 5,90 Q-5,102 -15,108 Z"
+              fill="rgba(128,127,247,0.88)" filter="url(#c3b2)"/>
+        <!-- MID: mauve-pink lower zone — base shape (b3) -->
+        <path d="M-15,72 Q20,65 50,68 Q80,74 115,66 V115 H-15 Z"
+              fill="rgba(188,153,251,0.88)" filter="url(#c3b3)"/>
+        <!-- FG: mauve-pink sharp top edge accent (b4 — sharper than base) -->
+        <path d="M-15,70 Q20,63 50,66 Q80,72 115,64 V74 Q80,78 50,76 Q20,73 -15,78 Z"
+              fill="rgba(175,140,248,0.6)" filter="url(#c3b4)"/>
+        <!-- BG: deep purple lower-left (b2) -->
+        <path d="M-15,85 Q10,78 25,85 Q35,95 25,108 Q15,115 -15,115 Z"
+              fill="rgba(160,111,246,0.88)" filter="url(#c3b2)"/>
+        <!-- PHASE 2: centre pale highlight blend -->
+        <path d="M30,25 Q50,18 70,28 Q78,42 65,55 Q50,62 35,52 Q25,40 30,25 Z"
+              fill="rgba(239,238,250,0.4)" filter="url(#c3b2)"/>
+        <!-- PHASE 2: pink-to-purple transition right side -->
+        <path d="M75,50 Q90,45 110,55 V75 Q95,80 78,72 Q68,62 75,50 Z"
+              fill="rgba(210,140,240,0.3)" filter="url(#c3b2)"/>
+      </svg>
       <h2>Card Three</h2>
       <p>Cras justo odio, dapibus ut facilisis in, egestas eget quam. Nullam quis risus eget urna mollis ornare vel eu leo. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
     </div>
@@ -309,30 +443,30 @@
   <div class="card full-width-card grad-waves">
     <svg class="gradient-shapes" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="b1"><feGaussianBlur stdDeviation="12"/></filter>
-        <filter id="b2"><feGaussianBlur stdDeviation="7"/></filter>
-        <filter id="b3"><feGaussianBlur stdDeviation="4"/></filter>
-        <filter id="b4"><feGaussianBlur stdDeviation="2"/></filter>
-        <filter id="b5"><feGaussianBlur stdDeviation="0.8"/></filter>
+        <filter id="b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+        <filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+        <filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter>
+        <filter id="b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.5"/></filter>
+        <filter id="b5" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.4"/></filter>
       </defs>
-      <!-- Background veil: deep blue atmospheric wash -->
-      <path d="M-10,30 Q20,15 50,25 T110,20 V110 H-10 Z"
+      <!-- Background veil: deep blue atmospheric wash (b1) -->
+      <path d="M-15,25 Q20,8 55,20 T115,15 V115 H-15 Z"
             fill="rgba(20,50,100,0.4)" filter="url(#b1)"/>
-      <!-- Mid-ground wave: medium blue flowing band -->
-      <path d="M-10,55 C15,40 35,65 55,48 S85,60 110,45 V65
-               C85,75 55,58 35,72 S15,55 -10,68 Z"
-            fill="rgba(60,130,220,0.45)" filter="url(#b3)"/>
-      <!-- Mid-ground wave: lighter blue band -->
-      <path d="M-10,40 C10,28 30,50 50,35 S80,45 110,32 V48
-               C80,56 50,42 30,55 S10,40 -10,52 Z"
-            fill="rgba(100,180,250,0.4)" filter="url(#b3)"/>
-      <!-- Foreground ribbon: white/light streak cutting through -->
-      <path d="M30,15 C40,20 50,10 65,18 C80,26 90,20 105,25
-               L103,30 C88,25 78,32 63,24 C48,16 38,26 28,21 Z"
-            fill="rgba(200,230,255,0.6)" filter="url(#b5)"/>
-      <!-- Accent veil: subtle cyan glow bottom-left -->
-      <path d="M-10,70 Q10,60 25,72 Q40,84 20,100 H-10 Z"
-            fill="rgba(80,200,230,0.25)" filter="url(#b2)"/>
+      <!-- Accent veil: subtle cyan glow bottom-left (heavy b2) -->
+      <path d="M-15,65 Q10,55 28,68 Q45,85 22,105 H-15 Z"
+            fill="rgba(80,200,230,0.3)" filter="url(#b2)"/>
+      <!-- Mid-ground wave: medium blue flowing band (medium b3) -->
+      <path d="M-15,55 C15,38 35,65 55,46 S85,58 115,42 V65
+               C85,78 55,56 35,74 S15,55 -15,70 Z"
+            fill="rgba(60,130,220,0.5)" filter="url(#b3)"/>
+      <!-- Mid-ground wave: lighter blue band (medium b3) -->
+      <path d="M-15,38 C10,24 30,50 50,32 S80,44 115,28 V46
+               C80,56 50,40 30,56 S10,40 -15,52 Z"
+            fill="rgba(100,180,250,0.45)" filter="url(#b3)"/>
+      <!-- Foreground ribbon: white/light streak cutting through (crisp b5) -->
+      <path d="M28,12 C40,18 50,6 65,15 C82,24 92,18 108,22
+               L106,28 C90,24 80,32 63,22 C48,14 38,24 26,18 Z"
+            fill="rgba(200,230,255,0.65)" filter="url(#b5)"/>
     </svg>
     <h2>Organic: Blue Waves &amp; Ribbon</h2>
     <p>This gradient uses inline SVG with per-shape blur filters. The deep blue atmospheric wash uses heavy blur (b1), the flowing wave bands use medium blur (b3), and the white ribbon cutting through uses crisp blur (b5). Each shape has independent blur control &mdash; something pure CSS cannot achieve.</p>
