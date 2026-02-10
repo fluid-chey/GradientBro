@@ -14,47 +14,26 @@ import { NoiseInfo, MoodInfo, FidelityLevel } from "../types";
  * Map noise analysis to feTurbulence parameters.
  */
 function turbulenceParams(
-  noise: NoiseInfo,
+  _noise: NoiseInfo,
   fidelity: FidelityLevel,
-  mood?: MoodInfo
+  _mood?: MoodInfo
 ) {
-  // ── baseFrequency: use the continuous value from the analyser ──────
-  // Clamp for safety; the analyser already outputs 0.3-1.0
-  const baseFrequency = Math.min(1.0, Math.max(0.3, noise.baseFrequency));
+  // ── Fixed grain defaults ───────────────────────────────────────────
+  // Analyser noise data is informational only. Every gradient gets the
+  // same strong, coarse, full-strength grain overlay. Users can fine-tune
+  // via the refinement guide or override presets in the skill.
+  const baseFrequency = 0.45;
 
-  // ── numOctaves: driven by sharpness ────────────────────────────────
-  // Low sharpness (soft noise) → fewer octaves (smoother)
-  // High sharpness (crispy grain) → more octaves (more detail)
-  // Fidelity still acts as a ceiling.
-  const maxOctaves = fidelity === "exact" ? 6 : fidelity === "vibe" ? 5 : 3;
-  const minOctaves = fidelity === "inspired" ? 2 : 3;
-  const numOctaves = Math.round(
-    minOctaves + noise.sharpness * (maxOctaves - minOctaves)
-  );
+  // ── numOctaves: driven by fidelity level ───────────────────────────
+  const numOctaves = fidelity === "exact" ? 6 : fidelity === "vibe" ? 5 : 3;
 
-  // ── opacity: driven by intensity × contrast ────────────────────────
-  // Replaces the old `intensity * 0.25` cap.
-  // Punchy noise (high contrast) gets strong opacity.
-  // Faint noise (low contrast) stays subtle.
-  // Effective range: ~0.04 to ~0.50
-  const rawOpacity = noise.intensity * (0.15 + noise.contrast * 0.35);
-  const opacity = Math.round(Math.min(0.50, Math.max(0.03, rawOpacity)) * 100) / 100;
+  // ── opacity: fixed at full strength ────────────────────────────────
+  // With mix-blend-mode: overlay, 1.0 opacity produces pronounced,
+  // clearly visible grain without obscuring the gradient underneath.
+  const opacity = 1.0;
 
-  // ── blend mode: based on mood ──────────────────────────────────────
-  let blendMode = "overlay"; // default
-  if (mood) {
-    if (
-      mood.brightness === "bright" ||
-      mood.brightness === "medium-bright"
-    ) {
-      blendMode = "soft-light";
-    } else if (mood.brightness === "dark" && noise.contrast > 0.5) {
-      // High-contrast noise on dark backgrounds benefits from overlay
-      // (already the default), but if contrast is moderate, soft-light
-      // avoids washing out
-      blendMode = "overlay";
-    }
-  }
+  // ── blend mode: always overlay ─────────────────────────────────────
+  const blendMode = "overlay";
 
   return { baseFrequency, numOctaves, opacity, blendMode };
 }

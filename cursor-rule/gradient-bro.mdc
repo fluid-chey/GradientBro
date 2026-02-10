@@ -1,3 +1,8 @@
+---
+description: Triggers gradient-bro skill when user asks to generate, replicate, or match a gradient
+alwaysApply: true
+---
+
 # GradientBro — Gradient Generation
 
 ## When to Activate

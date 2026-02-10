@@ -70,9 +70,14 @@ export function blurRadiusPx(blur: BlurInfo, fidelity: FidelityLevel): number {
 
 /**
  * Blur-radius-appropriate inset overflow to prevent edge artefacts.
+ * The pseudo-element must extend far enough beyond the container so
+ * that the Gaussian blur tail (which extends ~3× the radius) doesn't
+ * produce a visible edge when clipped by overflow: hidden.
  */
 export function blurOverflowPct(radiusPx: number): string {
-  const pct = Math.max(10, Math.round(radiusPx * 0.5));
+  // Raised from 0.5× to 0.65× and minimum from 10% to 15% to prevent
+  // the subtle dark-edge cutoffs visible at container boundaries
+  const pct = Math.max(15, Math.round(radiusPx * 0.65));
   return `${pct}%`;
 }
 
@@ -92,6 +97,12 @@ function regionBlurPx(
 /**
  * Build a radial-gradient CSS value for a single colour blob.
  * `radiusMultiplier` adjusts the transparent-stop based on sharpness.
+ *
+ * Uses a 3-stop gradient for natural falloff:
+ *   0%       → full colour at peak opacity
+ *   ~55% R   → same colour at reduced opacity (soft knee)
+ *   R        → same colour at alpha 0 (not `transparent`, which
+ *              interpolates toward black and causes dark halos)
  */
 function blobGradient(c: ColorRegion, radiusMultiplier: number = 1): string {
   const xPct = Math.round(c.position.x * 100);
@@ -104,7 +115,13 @@ function blobGradient(c: ColorRegion, radiusMultiplier: number = 1): string {
   const sharpnessFactor = 1.3 - c.edgeSharpness * 0.7;
   const radius = Math.round(baseRadius * sharpnessFactor * radiusMultiplier);
 
-  return `radial-gradient(circle at ${xPct}% ${yPct}%, rgba(${c.rgb[0]},${c.rgb[1]},${c.rgb[2]},${opacity}) 0%, transparent ${radius}%)`;
+  // Mid-stop at 55% of radius with 35% of peak opacity — creates a soft
+  // rolloff curve instead of a linear ramp that reads as a hard edge
+  const midRadius = Math.round(radius * 0.55);
+  const midOpacity = Math.round(opacity * 0.35 * 100) / 100;
+
+  const { rgb } = c;
+  return `radial-gradient(circle at ${xPct}% ${yPct}%, rgba(${rgb[0]},${rgb[1]},${rgb[2]},${opacity}) 0%, rgba(${rgb[0]},${rgb[1]},${rgb[2]},${midOpacity}) ${midRadius}%, rgba(${rgb[0]},${rgb[1]},${rgb[2]},0) ${radius}%)`;
 }
 
 // ─── Strategy A: single layer ────────────────────────────────────────

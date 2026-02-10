@@ -8,8 +8,15 @@ gradient CSS.
 
 ## Gradient Strategy Selection
 
-GradientBro analyses the reference image and recommends one of three strategies.
+GradientBro analyses the reference image and recommends one of four strategies.
 The strategy is output as `spec.strategy` in the JSON.
+
+**Trust the analyzer.** The classifier distinguishes "distinctive" shapes (waves,
+wisps, ribbons, petals — requiring real geometric features like elongation and
+sinuosity) from "generic" large-area regions (veils, angular-veils). When it
+recommends `"organic"`, the image genuinely has structural complexity that benefits
+from SVG shapes. Honour the recommendation unless the target container is very
+small (< ~250px wide). See SKILL.md Step 5 for the full routing decision.
 
 ### Simple
 - **When**: 2-3 colour regions, linear spatial distribution, uniform edge sharpness
@@ -21,16 +28,26 @@ The strategy is output as `spec.strategy` in the JSON.
 - **CSS pattern**: dark base + multiple radial gradients grouped into blur tiers + noise overlay
 - **Best for**: complex multi-colour blends like Apple Intelligence gradients, BBC ambients
 
-### Hybrid (most common)
+### Hybrid
 - **When**: one dominant dark region + lighter accent glows at varying sharpness
 - **CSS pattern**: dominant-colour base gradient + accent regions as mesh-style positioned blobs with per-group blur
 - **Best for**: moody dark gradients with localised warm/bright spots
 
+### Organic
+- **When**: images with distinctive shape features — waves, wisps, ribbons, petals, or high type diversity in contours. Recommended for photographs with rich depth and directional elements.
+- **Pattern**: CSS base gradient + inline `<svg>` with per-shape `<path>` elements and 5-tier blur filters + noise overlay
+- **Best for**: landscape photos, sunsets, scenes with depth, any reference with distinct colour zones at varying depths
+- **Key advantage**: each shape gets its own blur tier, creating perceptual depth that CSS-only strategies cannot achieve
+- **Container minimum**: ~250px wide. Below this, SVG shape detail is not perceptible under blur — use CSS-only strategies instead.
+
 The classifier considers:
-- Region count (2-3 → simple, 4+ → mesh/hybrid)
+- Region count (2-3 → simple, 4+ → mesh/hybrid/organic)
 - Spatial linearity via PCA (high → simple, low → mesh)
 - Edge sharpness variance (high → hybrid with multi-tier blur)
 - Dominant region weight (>50% → hybrid)
+- Distinctive contour count (waves, wisps, ribbons, petals → organic)
+- Contour type diversity (3+ different types → organic)
+- Spatial richness (many colours + distinctive contours → organic)
 
 ---
 
@@ -250,22 +267,30 @@ Grain uses strong fixed defaults — do NOT derive values from the analyser's
 
 | Parameter       | Default | Range       | Effect                            |
 |-----------------|---------|-------------|-----------------------------------|
-| `baseFrequency` | `0.9`   | 0.30 – 1.0 | Grain size (higher = finer)       |
-| `numOctaves`    | `6`     | 2 – 6       | Crispness (higher = sharper)      |
-| `opacity`       | `0.45`  | 0.03 – 0.60| Visibility                        |
+| `baseFrequency` | `0.45`  | 0.30 – 1.0 | Grain size (lower = coarser)      |
+| `numOctaves`    | `5`     | 2 – 6       | Crispness (higher = sharper)      |
+| `opacity`       | `1.0`   | 0.03 – 1.0 | Visibility (with overlay blend)   |
 
-These defaults produce a clearly visible, high-resolution, crisp grain that
-adds professional texture to every gradient.
+These defaults produce a coarse, pronounced, full-strength grain texture.
+With `mix-blend-mode: overlay`, opacity 1.0 creates maximum grain impact
+without obscuring the gradient underneath.
 
 **User override presets** (apply when user requests a specific grain style):
 
 | Request                    | baseFrequency | numOctaves | opacity |
 |----------------------------|---------------|------------|---------|
 | "subtle" / "light grain"  | 0.75          | 3          | 0.08    |
-| "film-like"               | 0.55          | 4          | 0.25    |
-| "coarse" / "chunky"       | 0.40          | 3          | 0.22    |
-| "maximum grain"            | 0.65          | 6          | 0.35    |
+| "film-like"               | 0.55          | 4          | 0.50    |
+| "coarse" / "chunky"       | 0.30          | 3          | 0.80    |
+| "maximum grain"            | 0.45 (default)| 5          | 1.0 + `filter: contrast(2.5)` |
 | "no grain"                 | —             | —          | — (omit `::after`) |
+
+**Beyond opacity 1.0 — contrast boost:** When the user wants grain more
+pronounced than the default, add `filter: contrast(N)` to the `::after`
+element. This amplifies the noise texture's light/dark values before the
+overlay blend mode is applied. Start at `contrast(1.5)`, increase by 0.5
+per step. Values up to 3.0-3.5 produce very aggressive grain; above that
+it starts to posterize.
 
 Users can also fine-tune grain in follow-up prompts (see refinement guide).
 
@@ -286,21 +311,10 @@ Users can also fine-tune grain in follow-up prompts (see refinement guide).
 
 ### Blend Mode and Brightness-Adaptive Opacity
 
-Always use `mix-blend-mode: overlay`. It works on both dark and light images.
-The old `soft-light` approach for light images was too subtle — grain became
-invisible on bright backgrounds.
-
-Instead, **adjust opacity based on overall brightness**:
-
-| Image brightness       | Blend mode | Opacity | Reason                              |
-|-----------------------|-----------|---------|--------------------------------------|
-| dark / medium-dark    | `overlay` | `0.45`  | Standard — overlay bites well on darks |
-| medium                | `overlay` | `0.50`  | Slightly more to stay visible          |
-| medium-bright / bright| `overlay` | `0.55`  | Boosted — overlay has less impact on lights |
-
-This ensures grain is equally prominent regardless of the gradient's
-brightness. The agent should assess overall brightness from the reference
-image (or the analyzer's `mood.brightness`) and set opacity accordingly.
+Always use `mix-blend-mode: overlay` at `opacity: 1.0`. Overlay blends
+the noise texture with the gradient — at full opacity it produces maximum
+grain impact while still allowing the gradient colours to show through.
+This works on both dark and light images without adjustment.
 
 Manual override options (for special cases):
 

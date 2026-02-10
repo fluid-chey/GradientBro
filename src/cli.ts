@@ -17,12 +17,16 @@ import { FidelityLevel } from "./types";
 
 const program = new Command();
 
+const pkg = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "..", "package.json"), "utf-8")
+);
+
 program
   .name("gradient-bro")
   .description(
     "Analyse reference images and generate complex CSS gradients with noise, blur, and blend modes."
   )
-  .version("1.0.0");
+  .version(pkg.version);
 
 // ── analyze ──────────────────────────────────────────────────────────
 

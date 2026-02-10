@@ -103,7 +103,18 @@ Pay special attention to the `strategy` field — it tells you which generation 
 
 Read the technique reference at `~/.cursor/skills/gradient-bro/reference.md` before writing CSS.
 
-The generator automatically selects between four strategies:
+#### Strategy routing decision (read this first)
+
+Apply these rules in priority order (first match wins):
+
+1. **User explicitly requests organic or CSS-only** → honour that request.
+2. **Container is less than ~250px wide** → use CSS-only (hybrid or mesh). At this size there are not enough pixels for SVG shape detail to be perceptible under blur. Use the analyzer's strategy field to choose between simple, mesh, and hybrid.
+3. **Follow the analyzer's `strategy` field** — for **both** photographs and abstract gradients. The classifier has been calibrated to distinguish images with genuine structural complexity (waves, wisps, ribbons, petals) from smooth blends that only have generic large-area regions. When it says `"organic"`, the image genuinely has shapes that benefit from SVG — **use organic**.
+4. **Optional upgrade for Track B photos**: if the analyzer returned `"hybrid"` or `"mesh"` for a photograph but your visual analysis (Step 4) reveals clear depth layers, distinct directional elements, or colour zones that CSS radial/linear gradients would flatten, you MAY upgrade to organic. This is a judgement call, not a requirement.
+
+**Key principle:** when the analyzer recommends organic, honour it. The classifier is selective — it requires distinctive geometric features (elongation, sinuosity, tip detection) not just "large colour regions." If it says organic, the image has real structure worth expressing with SVG shapes. Don't second-guess it in favour of simpler CSS unless the container is very small.
+
+The generator supports four strategies:
 
 #### Simple strategy
 For images with 2-3 colours in a linear flow with uniform blur. Uses a **5-layer stack**:
@@ -266,18 +277,20 @@ Every gradient gets a strong, high-res, crisp grain overlay by default. Do NOT d
 
 | Parameter       | Default value | Effect                                    |
 |-----------------|---------------|-------------------------------------------|
-| `baseFrequency` | `0.9`         | Very fine, high-resolution grain          |
-| `numOctaves`    | `6`           | Sharp, crisp texture (not diffused)       |
-| `opacity`       | `0.45`        | Pronounced, clearly visible grain         |
+| `baseFrequency` | `0.45`        | Coarse, textural grain                    |
+| `numOctaves`    | `5`           | Crisp texture with good detail (vibe)     |
+| `opacity`       | `1.0`         | Full-strength grain via overlay blend     |
 | `blend mode`    | `overlay`     | Always overlay — works on both dark and light |
-| `opacity`       | (adjusted)    | **0.45** for dark/medium, **0.55** for bright/light images |
 
 **User overrides:** If the user specifies grain preferences in their request (e.g. "subtle grain", "no grain", "film-like grain", "coarse grain"), adjust accordingly:
 - "subtle" / "light grain" → opacity `0.08`, numOctaves `3`
 - "no grain" → omit the `::after` layer entirely
-- "film-like" → baseFrequency `0.55`, numOctaves `4`, opacity `0.25`
-- "coarse" / "chunky" → baseFrequency `0.40`, numOctaves `3`, opacity `0.22`
-- "maximum grain" → baseFrequency `0.65`, numOctaves `6`, opacity `0.35`
+- "film-like" → baseFrequency `0.55`, numOctaves `4`, opacity `0.5`
+- "coarse" / "chunky" → baseFrequency `0.30`, numOctaves `3`, opacity `0.8`
+- "maximum grain" → keep defaults + add `filter: contrast(2.5)` to `::after`
+- "extreme grain" → keep defaults + add `filter: contrast(3.5)` to `::after`
+
+**Going beyond opacity 1.0:** When the user wants grain even more pronounced than the default, use `filter: contrast(N)` on the `::after` element. This amplifies the noise texture before it blends, making each grain particle bite harder. Start at `contrast(1.5)`, step by 0.5. See the refinement guide for the full escalation sequence.
 
 The user can also adjust grain in follow-up prompts — see Step 7.
 
@@ -305,6 +318,55 @@ Place the CSS targeting the selector/container the user specified. If the user s
   </div>
 </div>
 ```
+
+#### Multiple gradients in one document
+
+When generating several organic gradients in the same HTML document (e.g. a grid of cards, multiple sections), SVG `id` attributes must be globally unique or the filters will collide.
+
+**Filter ID namespacing:** Prefix every `<filter>`, `<radialGradient>`, and `<linearGradient>` `id` with an instance identifier:
+
+```html
+<!-- Card 1 -->
+<svg class="gradient-shapes" ...>
+  <defs>
+    <filter id="b1-card1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="b2-card1" ...>...</filter>
+    <!-- ... b3-card1, b4-card1, b5-card1 ... -->
+  </defs>
+  <path d="..." fill="rgba(...)" filter="url(#b3-card1)"/>
+</svg>
+
+<!-- Card 2 -->
+<svg class="gradient-shapes" ...>
+  <defs>
+    <filter id="b1-card2" ...>...</filter>
+    <!-- ... -->
+  </defs>
+  <path d="..." filter="url(#b2-card2)"/>
+</svg>
+```
+
+**Shared defs alternative:** If all instances use the same 5-tier blur system, you can define the filters once in a hidden SVG at the top of the document and reference them from all instances:
+
+```html
+<!-- Shared filter definitions (zero visual footprint) -->
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <defs>
+    <filter id="b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter>
+    <filter id="b4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.5"/></filter>
+    <filter id="b5" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0.4"/></filter>
+  </defs>
+</svg>
+
+<!-- Each card SVG references the shared filters — no id conflicts -->
+<svg class="gradient-shapes" ...>
+  <path d="..." filter="url(#b3)"/>
+</svg>
+```
+
+SVG gradient fills (`<radialGradient>`, `<linearGradient>`) must still be namespaced per instance since their colours differ per card.
 
 ### Step 7 — Support iterative refinement
 

@@ -36,6 +36,8 @@ export function composeCSS(
   const { strategy } = spec;
 
   switch (strategy) {
+    case "organic":
+      return composeOrganicFallbackCSS(spec, options);
     case "mesh":
     case "hybrid":
       return composeMeshCSS(spec, options);
@@ -43,6 +45,48 @@ export function composeCSS(
     default:
       return composeSimpleCSS(spec, options);
   }
+}
+
+// ─── Organic strategy (fallback — full organic requires the Cursor skill) ──
+
+/**
+ * When the analyser classifies an image as organic, the full result requires
+ * inline SVG with per-shape blur filters — something only the Cursor skill
+ * workflow can produce (the agent writes the SVG paths from visual analysis).
+ *
+ * This fallback outputs hybrid CSS for the base gradient + noise layers and
+ * a header comment explaining how to get the full organic result.
+ */
+function composeOrganicFallbackCSS(
+  spec: GradientSpec,
+  options: GeneratorOptions
+): string {
+  const shapeTypes = spec.shapes?.contours.map((c) => c.type) ?? [];
+  const uniqueTypes = [...new Set(shapeTypes)];
+
+  const lines: string[] = [];
+  lines.push(`/*`);
+  lines.push(` * GradientBro — organic strategy detected`);
+  lines.push(` *`);
+  if (uniqueTypes.length > 0) {
+    lines.push(` * Detected shapes: ${uniqueTypes.join(", ")}`);
+  }
+  lines.push(` * This image has complex organic shapes that benefit from inline SVG`);
+  lines.push(` * with per-shape blur filters for full depth and fidelity.`);
+  lines.push(` *`);
+  lines.push(` * The CSS below provides base gradient + noise layers as a starting point.`);
+  lines.push(` * For the full organic result with SVG shape layers, use:`);
+  lines.push(` *   gradient-bro analyze <image> --fidelity <level>`);
+  lines.push(` * and follow the GradientBro Cursor skill workflow.`);
+  lines.push(` *   (Run: gradient-bro setup-cursor)`);
+  lines.push(` */`);
+  lines.push(``);
+
+  // Generate hybrid CSS as a usable base
+  const hybridSpec: GradientSpec = { ...spec, strategy: "hybrid" };
+  lines.push(composeMeshCSS(hybridSpec, options));
+
+  return lines.join("\n");
 }
 
 // ─── Simple strategy (original path, enhanced) ──────────────────────

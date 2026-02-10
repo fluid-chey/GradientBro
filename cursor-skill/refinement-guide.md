@@ -10,14 +10,15 @@ requests to specific CSS parameter changes.
 
 | User says | Layer | Property to change | Direction |
 |-----------|-------|--------------------|-----------|
-| "more grain" / "grainier" / "more noise" | `::after` | `opacity` | Increase by 0.05-0.10 |
-| "more grain" (alternative) | `::after` SVG | `baseFrequency` | Decrease by 0.1 (coarser = more visible) |
-| "less grain" / "smoother" | `::after` | `opacity` | Decrease by 0.05-0.10 |
+| "more grain" / "grainier" / "more noise" | `::after` | `filter: contrast()` | Add or increase `filter: contrast(N)` — start at 1.5, step by 0.5 |
+| "more grain" (if opacity < 1.0) | `::after` | `opacity` | Increase opacity toward 1.0 first, then use contrast boost |
+| "less grain" / "smoother" | `::after` | `filter` then `opacity` | Remove/reduce contrast filter first; then decrease opacity |
 | "finer grain" | `::after` SVG | `baseFrequency` | Increase by 0.1-0.15 |
 | "coarser grain" | `::after` SVG | `baseFrequency` | Decrease by 0.1-0.15 |
 | "sharper grain" / "crispier grain" | `::after` SVG | `numOctaves` | Increase by 1-2 (more detail) |
 | "softer grain" | `::after` SVG | `numOctaves` | Decrease by 1-2 (smoother) |
-| "punchier grain" / "more contrast on grain" | `::after` | `opacity` | Increase by 0.08-0.15 (higher ceiling of 0.50) |
+| "punchier grain" / "more contrast on grain" | `::after` | `filter: contrast()` | Add `filter: contrast(1.5-2.0)` — amplifies grain beyond opacity limits |
+| "maximum grain" / "extreme grain" | `::after` | `filter: contrast()` | `filter: contrast(3.0)` or higher — very aggressive texture |
 | "more blur" / "dreamier" / "softer" | blur layer(s) | `filter: blur()` | Increase by 10-20px |
 | "less blur" / "sharper" | blur layer(s) | `filter: blur()` | Decrease by 10-20px |
 | "sharper edges" / "more defined shapes" | sharp tier | `filter: blur()` | Decrease by 5-10px; tighten gradient stops |
@@ -48,23 +49,58 @@ requests to specific CSS parameter changes.
 
 ### Noise Opacity
 
-The default grain is fine, crisp, and pronounced: `baseFrequency='0.9'`,
-`numOctaves='6'`, `opacity: 0.45`. All refinements adjust from this baseline.
+The default grain is coarse and full-strength: `baseFrequency='0.45'`,
+`numOctaves='5'`, `opacity: 1.0`, `mix-blend-mode: overlay`. All
+refinements adjust from this baseline.
 
 ```css
-/* Default: pronounced crisp grain */
-.container::after { opacity: 0.45; }
-
-/* After: "more grain" */
-.container::after { opacity: 0.55; }
+/* Default: full-strength coarse grain */
+.container::after { opacity: 1.0; }
 
 /* After: "less grain" */
-.container::after { opacity: 0.30; }
+.container::after { opacity: 0.6; }
+
+/* After: "subtle grain" */
+.container::after { opacity: 0.3; }
 ```
 
 - Minimum sensible: 0.03 (barely perceptible)
-- Maximum sensible: 0.50 (very grainy, stylised)
-- Step size: 0.05 – 0.10 per refinement
+- Maximum sensible: 1.0 (full-strength, the default)
+- Step size: 0.10 – 0.15 per refinement
+
+### Grain Contrast Boost (filter: contrast)
+
+When opacity is already at 1.0 and the user wants **even more** pronounced
+grain, use `filter: contrast()` on the `::after` element. This amplifies
+the light/dark values in the noise texture before the blend mode is applied,
+making each grain particle bite harder.
+
+```css
+/* Default: full-strength grain, no contrast boost */
+.container::after { opacity: 1.0; }
+
+/* After: "more grain" / "punchier grain" */
+.container::after { opacity: 1.0; filter: contrast(1.5); }
+
+/* After: "even more grain" */
+.container::after { opacity: 1.0; filter: contrast(2.0); }
+
+/* After: "maximum grain" / "extreme grain" */
+.container::after { opacity: 1.0; filter: contrast(3.0); }
+```
+
+**Escalation order** when the user keeps asking for more grain:
+1. First ensure `opacity: 1.0` (the default)
+2. Add `filter: contrast(1.5)` — noticeable bump
+3. Increase to `contrast(2.0)` — strong, textured
+4. Increase to `contrast(3.0)` — very aggressive
+5. Beyond 3.0 is possible but starts to look harsh / posterized
+
+**To reduce grain** from a contrast-boosted state:
+1. First reduce or remove the contrast filter
+2. Then reduce opacity if still too much
+
+Step size: 0.5 per refinement
 
 ### Noise Frequency (baseFrequency in SVG)
 

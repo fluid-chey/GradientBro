@@ -11,6 +11,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "node --test test/*.test.js",
+    "prepare": "[ -f tsconfig.json ] && npm run build || true",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

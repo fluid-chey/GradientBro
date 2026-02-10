@@ -22,25 +22,70 @@ export function classifyStrategy(
   shapes?: ShapeInfo
 ): GradientStrategy {
   // ── Organic: non-trivial shapes detected ────────────────────────────
-  // Gated on edge sharpness: smooth gradients where ALL cluster edges
-  // are very diffuse produce shape-analysis artefacts (k-means always
-  // creates regions, even in smooth blends). Only trigger organic when
-  // the image has at least some defined boundaries OR high complexity.
+  //
+  // Gated on edge sharpness AND contour quality. K-means always creates
+  // regions, even in smooth blends, and the shape analyser will find
+  // veils/angular-veils in any image with large, low-elongation regions.
+  // These "generic" shapes alone are NOT sufficient evidence for organic.
+  //
+  // "Distinctive" contours — waves, wisps, ribbons, petals — require
+  // real geometric features (elongation > 2.5, sinuosity, tip detection)
+  // that k-means artefacts don't produce. These are the reliable signal.
+  //
+  // When this classifier returns "organic", it MEANS it — the agent
+  // should honour the recommendation rather than downgrading to CSS-only.
   if (shapes && shapes.style !== "blobby" && shapes.contours.length >= 2) {
     const maxEdgeSharpness = Math.max(...colors.map((c) => c.edgeSharpness));
-    // Tiered triggers — smoother images need stronger evidence of real shapes
-    const hasDefinedEdges = maxEdgeSharpness > 0.25;
-    const isComplex = shapes.complexity > 0.6 && maxEdgeSharpness > 0.12;
-    // Waves and petals are shapes CSS fundamentally can't reproduce;
-    // trigger organic even in soft images if multiple are found — but
-    // require at least minimal edge definition (maxSharpness > 0.12)
-    // to filter out smooth blends where k-means produces spurious waves
-    const waveCount = shapes.contours.filter((c) => c.type === "wave").length;
-    const petalCount = shapes.contours.filter((c) => c.type === "petal").length;
-    const hasDistinctiveShapes =
-      (waveCount >= 2 || petalCount >= 2) && maxEdgeSharpness > 0.12;
 
-    if (hasDefinedEdges || isComplex || hasDistinctiveShapes) {
+    // Split contours into distinctive (real geometry) vs generic (just "large area")
+    const distinctiveContours = shapes.contours.filter(
+      (c) =>
+        c.type === "wave" ||
+        c.type === "wisp" ||
+        c.type === "ribbon" ||
+        c.type === "petal"
+    );
+    const contourTypes = new Set(shapes.contours.map((c) => c.type));
+
+    // Strong signal: well-defined edges in at least one region
+    const hasDefinedEdges = maxEdgeSharpness > 0.25;
+
+    // High complexity with edge definition
+    const isComplex = shapes.complexity > 0.6 && maxEdgeSharpness > 0.12;
+
+    // Waves and petals are shapes CSS fundamentally can't reproduce;
+    // trigger organic even in softer images if multiple are found
+    const waveCount = distinctiveContours.filter((c) => c.type === "wave").length;
+    const petalCount = distinctiveContours.filter((c) => c.type === "petal").length;
+    const hasDistinctiveShapes =
+      (waveCount >= 2 || petalCount >= 2) && maxEdgeSharpness > 0.10;
+
+    // Spatially rich images: many colour regions + distinctive contours.
+    // Requires at least 1 distinctive contour — veils alone are not enough.
+    const hasSpatialRichness =
+      colors.length >= 5 &&
+      distinctiveContours.length >= 1 &&
+      shapes.contours.length >= 3 &&
+      maxEdgeSharpness > 0.10;
+
+    // Abundant distinctive contours: 3+ shapes with real geometry is a
+    // strong signal regardless of edge sharpness (the geometric classifiers
+    // already filter out k-means artefacts).
+    const hasAbundantDistinctive = distinctiveContours.length >= 3;
+
+    // Type diversity: 3+ different contour types (e.g. wave + petal + veil)
+    // indicates genuine structural complexity, not just repeated artefacts.
+    const hasTypeDiversity =
+      contourTypes.size >= 3 && maxEdgeSharpness > 0.10;
+
+    if (
+      hasDefinedEdges ||
+      isComplex ||
+      hasDistinctiveShapes ||
+      hasSpatialRichness ||
+      hasAbundantDistinctive ||
+      hasTypeDiversity
+    ) {
       return "organic";
     }
   }

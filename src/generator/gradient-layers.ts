@@ -52,6 +52,13 @@ export function buildColorBlobs(
     // Spread radius from the spread value
     const radius = Math.round(30 + c.spread * 40);
 
-    return `radial-gradient(circle at ${xPct}% ${yPct}%, rgba(${c.rgb[0]},${c.rgb[1]},${c.rgb[2]},${opacity}) 0%, transparent ${radius}%)`;
+    // 3-stop gradient for natural falloff:
+    // - Mid-stop at 55% of radius with 35% of peak opacity (soft knee)
+    // - Use rgba(R,G,B,0) instead of `transparent` to avoid dark halos
+    //   (transparent = rgba(0,0,0,0) which interpolates toward black)
+    const midRadius = Math.round(radius * 0.55);
+    const midOpacity = Math.round(opacity * 0.35 * 100) / 100;
+
+    return `radial-gradient(circle at ${xPct}% ${yPct}%, rgba(${c.rgb[0]},${c.rgb[1]},${c.rgb[2]},${opacity}) 0%, rgba(${c.rgb[0]},${c.rgb[1]},${c.rgb[2]},${midOpacity}) ${midRadius}%, rgba(${c.rgb[0]},${c.rgb[1]},${c.rgb[2]},0) ${radius}%)`;
   });
 }
