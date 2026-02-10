@@ -14,6 +14,9 @@ export interface ColorRegion {
   weight: number;
   /** How spread-out the cluster is spatially, 0-1 */
   spread: number;
+  /** How sharply defined this region's boundary is, 0-1.
+   *  1 = crisp edge, 0 = completely diffuse. */
+  edgeSharpness: number;
 }
 
 /** Noise / grain characteristics detected in the image. */
@@ -24,6 +27,15 @@ export interface NoiseInfo {
   frequency: "fine" | "medium" | "coarse";
   /** Type of noise pattern detected */
   type: "grain" | "speckle" | "smooth";
+  /** How crisp/hard-edged the noise particles are, 0-1.
+   *  High = sharp film grain, low = soft digital noise. */
+  sharpness: number;
+  /** Dynamic range of the noise itself, 0-1.
+   *  High = punchy visible speckles, low = faint haze. */
+  contrast: number;
+  /** Continuous feTurbulence baseFrequency value, 0.3-1.0.
+   *  Maps directly to SVG without lossy categorical conversion. */
+  baseFrequency: number;
 }
 
 /** Blur characteristics detected in the image. */
@@ -47,6 +59,9 @@ export interface MoodInfo {
   brightness: "dark" | "medium-dark" | "medium" | "medium-bright" | "bright";
 }
 
+/** Which CSS generation strategy to use. */
+export type GradientStrategy = "simple" | "mesh" | "hybrid";
+
 /** The full gradient specification output by the analyzer. */
 export interface GradientSpec {
   colors: ColorRegion[];
@@ -55,6 +70,8 @@ export interface GradientSpec {
   vignette: VignetteInfo;
   dimensions: { width: number; height: number };
   mood: MoodInfo;
+  /** Recommended CSS generation strategy based on image characteristics. */
+  strategy: GradientStrategy;
 }
 
 /** Fidelity level that controls generation detail. */

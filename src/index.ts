@@ -9,6 +9,7 @@ export { analyzeImage } from "./analyzer/index";
 export { generateCSS } from "./generator/index";
 export type {
   GradientSpec,
+  GradientStrategy,
   ColorRegion,
   NoiseInfo,
   BlurInfo,

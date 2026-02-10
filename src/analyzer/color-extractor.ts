@@ -150,6 +150,7 @@ export function extractColors(
       },
       weight: Math.round(weight * 100) / 100,
       spread: Math.round(spread * 100) / 100,
+      edgeSharpness: 0, // computed later by edge-sharpness analyser
     });
   }
 

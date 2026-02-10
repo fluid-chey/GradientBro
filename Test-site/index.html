@@ -59,10 +59,168 @@
       margin-bottom: 32px;
     }
 
+    /* ============================================================
+       GRADIENT: Dark Blue (square ref → full-width card)
+       Deep midnight navy centre, periwinkle/silver edge glows,
+       warm amber accent top-right, heavy grain.
+       ============================================================ */
+    .grad-blue {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(170deg, #0c0b1a 0%, #0f0e1d 45%, #141328 100%);
+    }
+    .grad-blue > * { position: relative; z-index: 3; }
+    .grad-blue::before {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(100, 170, 220, 0.5) 0%, transparent 28%),
+        radial-gradient(circle at 42% 8%, rgba(151, 159, 197, 0.45) 0%, transparent 22%),
+        radial-gradient(circle at 88% 10%, rgba(180, 140, 80, 0.35) 0%, transparent 22%),
+        radial-gradient(circle at 5% 55%, rgba(108, 108, 152, 0.55) 0%, transparent 30%),
+        radial-gradient(circle at 15% 85%, rgba(130, 140, 180, 0.5) 0%, transparent 28%),
+        radial-gradient(circle at 55% 92%, rgba(108, 108, 152, 0.45) 0%, transparent 32%),
+        radial-gradient(circle at 90% 80%, rgba(65, 64, 99, 0.4) 0%, transparent 25%),
+        radial-gradient(circle at 50% 45%, rgba(15, 14, 29, 0.95) 0%, transparent 50%);
+      filter: blur(55px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .grad-blue::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.46' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.18;
+      mix-blend-mode: overlay;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* ============================================================
+       GRADIENT: Olive/Dark (portrait ref → card one)
+       Near-black centre, olive-gold glow top-left + bottom-left.
+       ============================================================ */
+    .grad-olive {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(155deg, #1a1914 0%, #111014 40%, #0e0d11 100%);
+    }
+    .grad-olive > * { position: relative; z-index: 3; }
+    .grad-olive::before {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(135, 129, 86, 0.85) 0%, transparent 35%),
+        radial-gradient(circle at 5% 45%, rgba(99, 95, 67, 0.45) 0%, transparent 28%),
+        radial-gradient(circle at 22% 88%, rgba(135, 129, 86, 0.7) 0%, transparent 32%),
+        radial-gradient(circle at 50% 95%, rgba(68, 65, 51, 0.5) 0%, transparent 35%),
+        radial-gradient(circle at 78% 92%, rgba(99, 95, 67, 0.35) 0%, transparent 28%),
+        radial-gradient(circle at 50% 48%, rgba(20, 19, 24, 0.9) 0%, transparent 55%);
+      filter: blur(60px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .grad-olive::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.14;
+      mix-blend-mode: overlay;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* ============================================================
+       GRADIENT: Peach/Pink (portrait ref → card two)
+       Warm terracotta top, soft rose-pink bottom, lavender-blue
+       accent at right-centre, golden glow left-centre.
+       ============================================================ */
+    .grad-peach {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(170deg, #7f3b26 0%, #995340 35%, #d4b1ad 100%);
+    }
+    .grad-peach > * { position: relative; z-index: 3; }
+    .grad-peach::before {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 50% 8%, rgba(187, 120, 91, 0.8) 0%, transparent 35%),
+        radial-gradient(circle at 60% 25%, rgba(127, 59, 38, 0.7) 0%, transparent 30%),
+        radial-gradient(circle at 40% 40%, rgba(153, 83, 64, 0.65) 0%, transparent 35%),
+        radial-gradient(circle at 15% 58%, rgba(210, 180, 80, 0.4) 0%, transparent 25%),
+        radial-gradient(circle at 75% 62%, rgba(120, 110, 190, 0.55) 0%, transparent 28%),
+        radial-gradient(circle at 30% 85%, rgba(212, 177, 173, 0.7) 0%, transparent 35%),
+        radial-gradient(circle at 70% 80%, rgba(183, 141, 145, 0.5) 0%, transparent 30%);
+      filter: blur(50px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .grad-peach::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.73' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.16;
+      mix-blend-mode: soft-light;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* ============================================================
+       GRADIENT: Amber/Gold (portrait ref → card three)
+       Rich monochrome amber, darker left, brighter golden right
+       and bottom-right corner glow.
+       ============================================================ */
+    .grad-amber {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #3d2200 0%, #6e3c00 40%, #8a4e00 100%);
+    }
+    .grad-amber > * { position: relative; z-index: 3; }
+    .grad-amber::before {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 15% 25%, rgba(95, 49, 0, 0.8) 0%, transparent 35%),
+        radial-gradient(circle at 35% 50%, rgba(115, 60, 0, 0.7) 0%, transparent 38%),
+        radial-gradient(circle at 60% 45%, rgba(134, 71, 0, 0.65) 0%, transparent 40%),
+        radial-gradient(circle at 82% 50%, rgba(151, 82, 0, 0.75) 0%, transparent 38%),
+        radial-gradient(circle at 88% 90%, rgba(187, 112, 0, 0.8) 0%, transparent 30%),
+        radial-gradient(circle at 70% 85%, rgba(200, 130, 10, 0.5) 0%, transparent 35%);
+      filter: blur(65px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .grad-amber::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.56' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.10;
+      mix-blend-mode: overlay;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
     .card-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
+    }
+
+    .card-grid .card {
+      min-height: 480px;
     }
 
     @media (max-width: 768px) {
@@ -83,21 +241,21 @@
     <p>This page exists to test GradientBro gradient generation. The black cards below are targets &mdash; each one can have its solid fill replaced with a generated CSS gradient to verify the tool output looks correct at different sizes and layouts.</p>
   </div>
 
-  <div class="card full-width-card">
+  <div class="card full-width-card grad-blue">
     <h2>Full-Width Card</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus luctus urna sed urna ultricies ac tempor dui sagittis. In condimentum facilisis porta. Sed nec diam eu diam mattis viverra. Nulla fringilla, orci ac euismod semper, magna diam porttitor mauris, quis sollicitudin sapien justo in est. Pellentesque viverra fermentum libero, et volutpat nulla egestas in.</p>
   </div>
 
   <div class="card-grid">
-    <div class="card">
+    <div class="card grad-olive">
       <h2>Card One</h2>
       <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Maecenas faucibus mollis interdum. Cras mattis consectetur purus sit amet fermentum.</p>
     </div>
-    <div class="card">
+    <div class="card grad-peach">
       <h2>Card Two</h2>
       <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
     </div>
-    <div class="card">
+    <div class="card grad-amber">
       <h2>Card Three</h2>
       <p>Cras justo odio, dapibus ut facilisis in, egestas eget quam. Nullam quis risus eget urna mollis ornare vel eu leo. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
     </div>

@@ -2,13 +2,16 @@
  * Image analysis orchestrator.
  *
  * Runs the full pipeline: load image -> extract colors -> analyse noise ->
- * analyse blur -> detect vignette -> detect mood -> return GradientSpec.
+ * analyse blur -> compute edge sharpness -> detect vignette -> detect mood ->
+ * classify strategy -> return GradientSpec.
  */
 
 import { loadImage } from "../utils/image";
 import { extractColors } from "./color-extractor";
 import { analyzeNoise } from "./noise-analyzer";
 import { analyzeBlur } from "./blur-analyzer";
+import { assignPixelsToClusters, computeEdgeSharpness } from "./edge-sharpness";
+import { classifyStrategy } from "./strategy-classifier";
 import { detectVignette, detectMood } from "./region-mapper";
 import { GradientSpec, FidelityLevel } from "../types";
 
@@ -45,12 +48,19 @@ export async function analyzeImage(
   // Load image to a small working size
   const img = await loadImage(imagePath, size);
 
-  // Run all analysers
+  // Run core analysers
   const colors = extractColors(img, clusters);
   const noise = analyzeNoise(img);
   const blur = analyzeBlur(img);
   const vignette = detectVignette(img);
   const mood = detectMood(img);
+
+  // Compute per-region edge sharpness
+  const assignments = assignPixelsToClusters(img, colors);
+  computeEdgeSharpness(img, colors, assignments);
+
+  // Classify the optimal CSS generation strategy
+  const strategy = classifyStrategy(colors);
 
   return {
     colors,
@@ -62,5 +72,6 @@ export async function analyzeImage(
       height: img.originalHeight,
     },
     mood,
+    strategy,
   };
 }
