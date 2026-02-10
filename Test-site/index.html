@@ -213,6 +213,47 @@
       border-radius: inherit;
     }
 
+    /* ============================================================
+       GRADIENT: Blue Waves (organic strategy — inline SVG demo)
+       Deep navy base with flowing blue wave bands and a crisp
+       white ribbon cutting through. Demonstrates per-shape blur.
+       ============================================================ */
+    .grad-waves {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(170deg, #081428 0%, #0a1a35 50%, #061020 100%);
+    }
+    .grad-waves > * { position: relative; z-index: 3; }
+    .grad-waves .gradient-shapes {
+      position: absolute;
+      inset: -15%;
+      width: 130%;
+      height: 130%;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .grad-waves::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.20;
+      mix-blend-mode: overlay;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .section-label {
+      max-width: 720px;
+      margin: 48px auto 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #999;
+    }
+
     .card-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -246,6 +287,8 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus luctus urna sed urna ultricies ac tempor dui sagittis. In condimentum facilisis porta. Sed nec diam eu diam mattis viverra. Nulla fringilla, orci ac euismod semper, magna diam porttitor mauris, quis sollicitudin sapien justo in est. Pellentesque viverra fermentum libero, et volutpat nulla egestas in.</p>
   </div>
 
+  <div class="section-label">CSS Strategy (simple / mesh / hybrid)</div>
+
   <div class="card-grid">
     <div class="card grad-olive">
       <h2>Card One</h2>
@@ -259,6 +302,40 @@
       <h2>Card Three</h2>
       <p>Cras justo odio, dapibus ut facilisis in, egestas eget quam. Nullam quis risus eget urna mollis ornare vel eu leo. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
     </div>
+  </div>
+
+  <div class="section-label">Organic Strategy (inline SVG with per-shape blur)</div>
+
+  <div class="card full-width-card grad-waves">
+    <svg class="gradient-shapes" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="b1"><feGaussianBlur stdDeviation="12"/></filter>
+        <filter id="b2"><feGaussianBlur stdDeviation="7"/></filter>
+        <filter id="b3"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="b4"><feGaussianBlur stdDeviation="2"/></filter>
+        <filter id="b5"><feGaussianBlur stdDeviation="0.8"/></filter>
+      </defs>
+      <!-- Background veil: deep blue atmospheric wash -->
+      <path d="M-10,30 Q20,15 50,25 T110,20 V110 H-10 Z"
+            fill="rgba(20,50,100,0.4)" filter="url(#b1)"/>
+      <!-- Mid-ground wave: medium blue flowing band -->
+      <path d="M-10,55 C15,40 35,65 55,48 S85,60 110,45 V65
+               C85,75 55,58 35,72 S15,55 -10,68 Z"
+            fill="rgba(60,130,220,0.45)" filter="url(#b3)"/>
+      <!-- Mid-ground wave: lighter blue band -->
+      <path d="M-10,40 C10,28 30,50 50,35 S80,45 110,32 V48
+               C80,56 50,42 30,55 S10,40 -10,52 Z"
+            fill="rgba(100,180,250,0.4)" filter="url(#b3)"/>
+      <!-- Foreground ribbon: white/light streak cutting through -->
+      <path d="M30,15 C40,20 50,10 65,18 C80,26 90,20 105,25
+               L103,30 C88,25 78,32 63,24 C48,16 38,26 28,21 Z"
+            fill="rgba(200,230,255,0.6)" filter="url(#b5)"/>
+      <!-- Accent veil: subtle cyan glow bottom-left -->
+      <path d="M-10,70 Q10,60 25,72 Q40,84 20,100 H-10 Z"
+            fill="rgba(80,200,230,0.25)" filter="url(#b2)"/>
+    </svg>
+    <h2>Organic: Blue Waves &amp; Ribbon</h2>
+    <p>This gradient uses inline SVG with per-shape blur filters. The deep blue atmospheric wash uses heavy blur (b1), the flowing wave bands use medium blur (b3), and the white ribbon cutting through uses crisp blur (b5). Each shape has independent blur control &mdash; something pure CSS cannot achieve.</p>
   </div>
 
 </body>
